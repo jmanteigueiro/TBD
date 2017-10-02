@@ -1,0 +1,65 @@
+Scripts:
+
+Criar Tabela People
+
+	DROP TABLE Table_People;
+	CREATE TABLE IF NOT EXISTS Table_People (
+	    id 		INTEGER PRIMARY KEY
+	                       NOT NULL,
+	    name    VARCHAR(50) NOT NULL
+	                       DEFAULT "Jon Doe"
+	);
+
+Criar Tabela Log
+	
+	DROP TABLE Table_Log;
+	CREATE TABLE IF NOT EXISTS Table_Log (
+	    id 			INTEGER PRIMARY KEY
+	                       NOT NULL,
+	    operation   CHAR(10) NOT NULL
+	    person_id 	INTEGER  NOT NULL
+	    date_begin 	DATETIME NOT NULL
+	    date_end 	DATETIME NOT NULL
+	);
+
+Transaction Isolation
+
+	Read Uncommited
+		SET TRANSACTION ISOLATION LEVEL READ UNCOMMITED;
+		DECLARE @dateBegin DATETIME;
+		SET @dateBegin = datetime('now');
+		BEGIN TRANSACTION;
+			INSERT INTO Table_People (id, name) VALUES (@id, @name);
+		COMMIT;
+		INSERT INTO Table_Log (operation, person_id, date_begin, date_end)
+			VALUES ('I/D/U', @personId, @dateBegin, datetime('now'));
+      
+	Read Commited
+		SET TRANSACTION ISOLATION LEVEL READ COMMITED;
+		DECLARE @dateBegin DATETIME;
+		SET @dateBegin = datetime('now');
+		BEGIN TRANSACTION;
+			INSERT INTO Table_People (id, name) VALUES (@id, @name);
+		COMMIT;
+		INSERT INTO Table_Log (operation, person_id, date_begin, date_end)
+			VALUES ('I/D/U', @id, @dateBegin, datetime('now'));
+      
+	Repeatable Read
+		SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+		DECLARE @dateBegin DATETIME;
+		SET @dateBegin = datetime('now');
+		BEGIN TRANSACTION;
+			INSERT INTO Table_People (id, name) VALUES (@id, @name);
+		COMMIT;
+		INSERT INTO Table_Log (operation, person_id, date_begin, date_end)
+			VALUES ('I/D/U', @id, @dateBegin, datetime('now'));
+      
+	Serializable
+		SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+		DECLARE @dateBegin DATETIME;
+		SET @dateBegin = datetime('now');
+		BEGIN TRANSACTION;
+			INSERT INTO Table_People (id, name) VALUES (@id, @name);
+		COMMIT;
+		INSERT INTO Table_Log (operation, person_id, date_begin, date_end)
+			VALUES ('I/D/U', @id, @dateBegin, datetime('now'));
