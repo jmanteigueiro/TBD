@@ -2,3 +2,6 @@
 TBD/bin/
 
 TBD/obj/
+.vs/TBD/v15/sqlite3/storage.ide
+.vs/TBD/v15/sqlite3/storage.ide
+*.ide
