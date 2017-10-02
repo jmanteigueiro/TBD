@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TBD
 {
@@ -19,8 +8,19 @@ namespace TBD
     /// </summary>
     public partial class EditWindow : Window
     {
+        const string DEFAULT_TABLENAME      = "Table_Main";
+        const string DEFAULT_LOGTABLENAME   = "Table_Log";
+        
+        SqlConnection sqlConnection;
+
         public EditWindow()
         {
+            InitializeComponent();
+        }
+
+        public EditWindow(SqlConnection sqlConnection)
+        {
+            this.sqlConnection = sqlConnection;
             InitializeComponent();
         }
 
@@ -31,6 +31,16 @@ namespace TBD
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
+            string isolationLevel = Application.Current.Properties["IsolationLevel"] as string;
+
+            string query = "INSERT INTO " + DEFAULT_TABLENAME + " (id, name) VALUES ('" + TextBoxId.Text + "', '" + TextBoxName.Text + "')";
+
+            string transaction = QueryMethods.CreateTransaction(isolationLevel, query);
+
+            SqlCommand sqlCommand = new SqlCommand(transaction, sqlConnection);
+
+            sqlCommand.ExecuteNonQuery();
+
             this.Close();
         }
     }

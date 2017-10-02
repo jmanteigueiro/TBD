@@ -26,14 +26,24 @@ namespace TBD
         const string DEFAULT_SERVERDATABASE = "TBD";
         const string DEFAULT_SERVERUSER     = "sa";
         const string DEFAULT_SERVERPASSWORD = "systemadmin";
-        const string DEFAULT_TABLENAME      = "Table_test";
-        const string DEFAULT_LOGTABLENAME   = "Log";
+        const string DEFAULT_TABLENAME      = "Table_Main";
+        const string DEFAULT_LOGTABLENAME   = "Table_Log";
+        const string DEFAULT_ISOLATIONLEVEL = "READ UNCOMMITTED";
 
         SqlConnection sqlConnection;
 
         DataSet dataSetMain, dataSetLog;
 
         int refreshTimer = 1000;
+
+        string isolationLevel {
+            get {
+                return Application.Current.Properties["IsolationLevel"] as string;
+            }
+            set {
+                Application.Current.Properties["IsolationLevel"] = (value as string).ToUpper();
+            }
+        }
 
         public MainWindow()
         {
@@ -58,6 +68,7 @@ namespace TBD
             Application.Current.Properties["ServerDatabase"] = DEFAULT_SERVERDATABASE;
             Application.Current.Properties["ServerUser"]     = DEFAULT_SERVERUSER;
             Application.Current.Properties["ServerPassword"] = DEFAULT_SERVERPASSWORD;
+            Application.Current.Properties["IsolationLevel"] = DEFAULT_ISOLATIONLEVEL;
         }
 
         async private void ConnectToDatabase()
@@ -230,13 +241,18 @@ namespace TBD
                 LabelMilliseconds.Content = refreshTimer.ToString() + " ms";
         }
 
+        private void ComboBoxIsolation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string newIsolationLevel = (e.AddedItems[0] as ComboBoxItem).Content as string;
+            isolationLevel = newIsolationLevel.ToUpper();
+            Console.Out.WriteLine(isolationLevel);
+        }
+
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
-            EditWindow editWindow = new EditWindow();
+            EditWindow editWindow = new EditWindow(sqlConnection);
 
             editWindow.Show();
         }
-
-
     }
 }
