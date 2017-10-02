@@ -26,11 +26,14 @@ namespace TBD
         const string DEFAULT_SERVERDATABASE = "TBD";
         const string DEFAULT_SERVERUSER     = "sa";
         const string DEFAULT_SERVERPASSWORD = "systemadmin";
+        const string DEFAULT_TABLENAME      = "Table_test";
+        const string DEFAULT_LOGTABLENAME   = "Log";
 
         SqlConnection sqlConnection;
 
         DataSet dataSet;
 
+        int refreshTimer = 1000;
 
         public MainWindow()
         {
@@ -106,22 +109,25 @@ namespace TBD
 
         }
 
+        private void CallBackgroundTask()
+        {
+            new Task(() => FetchMainTable()).Start();
+        }
+
         private void FetchMainTable()
         {
             while (true)
             {
                 if (sqlConnection != null && sqlConnection.State == ConnectionState.Open)
                 {
-                    string query = "SELECT * FROM Table_test";
+                    string query = "SELECT * FROM " + DEFAULT_TABLENAME;
                     SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
                     dataSet = new DataSet();
                     sqlDataAdapter.Fill(dataSet);
                     this.Dispatcher.Invoke(() => DataGridMain.ItemsSource = dataSet.Tables[0].DefaultView);       
                 }
-
-
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(refreshTimer);
             }
         }
 
@@ -178,9 +184,18 @@ namespace TBD
             }
         }
 
-        private async void CallBackgroundTask()
+        private void SliderTimer_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            new Task(() => FetchMainTable()).Start();
+            refreshTimer = Convert.ToInt16(e.NewValue);
+            if (LabelMilliseconds != null)
+                LabelMilliseconds.Content = refreshTimer.ToString() + " ms";
+        }
+
+        private void ButtonEdit_Click(object sender, RoutedEventArgs e)
+        {
+            EditWindow editWindow = new EditWindow();
+
+            editWindow.Show();
         }
     }
 }

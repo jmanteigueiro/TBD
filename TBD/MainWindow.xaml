@@ -5,24 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TBD"
         mc:Ignorable="d"
-        Title="Tecnologias de Bases de Dados" Height="350" Width="533.898">
+        Title="Tecnologias de Bases de Dados" Height="444" Width="533.898">
     <Grid>
-        <Menu HorizontalAlignment="Left" Width="517" Height="23" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="515*"/>
+            <ColumnDefinition Width="11*"/>
+        </Grid.ColumnDefinitions>
+        <Menu HorizontalAlignment="Left" Width="517" Height="23" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem x:Name="ItemTable" Header="Table" Click="ItemTable_Click"></MenuItem>
             <MenuItem x:Name="ItemLog" Header="Log" Click="ItemLog_Click"></MenuItem>
             <MenuItem x:Name="ItemStatus" Header="Server Status" Click="ItemStatus_Click"></MenuItem>
             <MenuItem x:Name="ItemAbout" Header="About" Click="ItemAbout_Click"></MenuItem>
         </Menu>
-        <DataGrid x:Name="DataGridMain" HorizontalAlignment="Left" Height="286" Margin="10,30,0,0" VerticalAlignment="Top" Width="353" Visibility="Visible"/>
+        <DataGrid x:Name="DataGridMain" HorizontalAlignment="Left" Height="373" Margin="10,30,0,0" VerticalAlignment="Top" Width="353" Visibility="Visible"/>
         <DataGrid x:Name="DataGridLog" HorizontalAlignment="Left" Height="286" Margin="10,30,0,0" VerticalAlignment="Top" Width="353" Visibility="Hidden"/>
         <Label x:Name="LabelConsole" Content="" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top" Height="286" Width="353" Foreground="White" Background="Black" Visibility="Hidden"/>
-        <ComboBox HorizontalAlignment="Left" Margin="368,104,0,0" VerticalAlignment="Top" Width="139"/>
+        <ComboBox HorizontalAlignment="Left" Margin="373,99,0,0" VerticalAlignment="Top" Width="139"/>
         <Label Content="Isolation Level" HorizontalAlignment="Left" Margin="368,73,0,0" VerticalAlignment="Top" Width="139"/>
-        <Slider HorizontalAlignment="Left" Margin="368,199,0,0" VerticalAlignment="Top" Width="139"/>
-        <Label Content="Refresh Timer (seconds)" HorizontalAlignment="Left" Margin="368,159,0,0" VerticalAlignment="Top" Width="139"/>
+        <Slider x:Name="SliderTimer" HorizontalAlignment="Left" Margin="373,185,0,0" VerticalAlignment="Top" Width="148" ValueChanged="SliderTimer_ValueChanged" Minimum="200" Maximum="3000" Value="1000" SmallChange="50" LargeChange="100" Grid.ColumnSpan="2"/>
+        <Label Content="Refresh Timer:" HorizontalAlignment="Left" Margin="368,159,0,0" VerticalAlignment="Top" Width="84"/>
         <Ellipse x:Name="EllipseStatus" Fill="Orange" HorizontalAlignment="Left" Height="11" Margin="373,36,0,0" Stroke="Black" VerticalAlignment="Top" Width="11" 
                  RenderTransformOrigin="1.26,1.224" />
         <Button x:Name="ButtonSettings" Content="Connection Settings" HorizontalAlignment="Left" Margin="389,32,0,0" VerticalAlignment="Top" Width="118" Click="ButtonSettings_Click"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="368,228,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="ButtonEdit" Content="Add/Edit Record" HorizontalAlignment="Left" Margin="389,256,0,0" VerticalAlignment="Top" Width="103" Click="ButtonEdit_Click"/>
+        <Label x:Name="LabelMilliseconds" Content="1000 ms" HorizontalAlignment="Left" Margin="452,159,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

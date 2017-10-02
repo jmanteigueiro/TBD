@@ -15,7 +15,7 @@
         <TextBox x:Name="TextBoxServerName" HorizontalAlignment="Left" Height="23" Margin="112,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
         <TextBox x:Name="TextBoxUserName" HorizontalAlignment="Left" Height="23" Margin="112,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
         <PasswordBox x:Name="PasswordBoxPassword" HorizontalAlignment="Left" Margin="112,105,0,0" VerticalAlignment="Top" Width="150" Height="22"/>
-        <Button x:Name="ButtonConnect" Content="Connect" HorizontalAlignment="Left" Margin="32,169,0,0" VerticalAlignment="Top" Width="80" Click="ButtonConnect_Click"/>
+        <Button IsDefault="True" x:Name="ButtonConnect" Content="Connect" HorizontalAlignment="Left" Margin="32,169,0,0" VerticalAlignment="Top" Width="80" Click="ButtonConnect_Click"/>
         <Button x:Name="ButtonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="163,169,0,0" VerticalAlignment="Top" Width="80" Click="ButtonCancel_Click"/>
 
     </Grid>
