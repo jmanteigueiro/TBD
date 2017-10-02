@@ -133,7 +133,12 @@ namespace TBD
                     catch (Exception e)
                     {
                         sqlConnection.Close();
-                        WriteToConsoleLog("Error: Main table does not exist. Please reconnect after creating it.");
+                        this.Dispatcher.Invoke(() => {
+                            WriteToConsoleLog("Error: Main table does not exist. Connection closed.");
+                            ItemStatus_Click(null, null);
+                            EllipseStatus.Fill = new SolidColorBrush(Colors.Red);
+                            });
+                        continue;
                     }
 
                     this.Dispatcher.Invoke(() => DataGridMain.ItemsSource = dataSetMain.Tables[0].DefaultView);
@@ -151,7 +156,12 @@ namespace TBD
                     catch (Exception e)
                     {
                         sqlConnection.Close();
-                        WriteToConsoleLog("Error: Log table does not exist. Please reconnect after creating it.");
+                        this.Dispatcher.Invoke(() => {
+                            WriteToConsoleLog("Error: Log table does not exist. Connection closed.");
+                            ItemStatus_Click(null, null);
+                            EllipseStatus.Fill = new SolidColorBrush(Colors.Red);
+                        });
+                        continue;
                     }
 
                     this.Dispatcher.Invoke(() => DataGridLog.ItemsSource = dataSetLog.Tables[0].DefaultView);
