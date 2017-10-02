@@ -23,5 +23,6 @@
         <Ellipse x:Name="EllipseStatus" Fill="Orange" HorizontalAlignment="Left" Height="11" Margin="373,36,0,0" Stroke="Black" VerticalAlignment="Top" Width="11" 
                  RenderTransformOrigin="1.26,1.224" />
         <Button x:Name="ButtonSettings" Content="Connection Settings" HorizontalAlignment="Left" Margin="389,32,0,0" VerticalAlignment="Top" Width="118" Click="ButtonSettings_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="368,228,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

@@ -25,9 +25,12 @@ namespace TBD
         const string DEFAULT_SERVERNAME     = "localhost";
         const string DEFAULT_SERVERDATABASE = "TBD";
         const string DEFAULT_SERVERUSER     = "sa";
-        const string DEFAULT_SERVERPASSWORD = "systemadmin17-";
+        const string DEFAULT_SERVERPASSWORD = "systemadmin";
 
         SqlConnection sqlConnection;
+
+        DataSet dataSet;
+
 
         public MainWindow()
         {
@@ -42,7 +45,8 @@ namespace TBD
 
             ConnectToDatabase();
 
-            DataSet ds = new DataSet();
+            CallBackgroundTask();
+
         }
 
         private void InitializeProperties()
@@ -57,7 +61,7 @@ namespace TBD
         {
             EllipseStatus.Fill = new SolidColorBrush(Colors.Orange);
 
-            String str = "server=" + Application.Current.Properties["ServerName"] + ";" +
+            string str = "server=" + Application.Current.Properties["ServerName"] + ";" +
                 "database=" + Application.Current.Properties["ServerDatabase"] + ";" +
                 "UID=" + Application.Current.Properties["ServerUser"] + ";" +
                 "password=" + Application.Current.Properties["ServerPassword"] + ";";
@@ -100,6 +104,25 @@ namespace TBD
             EllipseStatus.Fill = new SolidColorBrush(Colors.Green);
             WriteToConsoleLog("Connected successfully to the server!");
 
+        }
+
+        private void FetchMainTable()
+        {
+            while (true)
+            {
+                if (sqlConnection != null && sqlConnection.State == ConnectionState.Open)
+                {
+                    string query = "SELECT * FROM Table_test";
+                    SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+                    dataSet = new DataSet();
+                    sqlDataAdapter.Fill(dataSet);
+                    this.Dispatcher.Invoke(() => DataGridMain.ItemsSource = dataSet.Tables[0].DefaultView);       
+                }
+
+
+                System.Threading.Thread.Sleep(1000);
+            }
         }
 
         private void WriteToConsoleLog(string str)
@@ -153,6 +176,11 @@ namespace TBD
             {
                 ConnectToDatabase();
             }
+        }
+
+        private async void CallBackgroundTask()
+        {
+            new Task(() => FetchMainTable()).Start();
         }
     }
 }
