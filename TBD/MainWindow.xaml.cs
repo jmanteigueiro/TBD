@@ -25,7 +25,7 @@ namespace TBD
         const string DEFAULT_SERVERNAME     = "localhost";
         const string DEFAULT_SERVERDATABASE = "TBD";
         const string DEFAULT_SERVERUSER     = "sa";
-        const string DEFAULT_SERVERPASSWORD = "systemadmin";
+        const string DEFAULT_SERVERPASSWORD = "systemadmin17-";
 
         SqlConnection sqlConnection;
 
@@ -79,6 +79,12 @@ namespace TBD
                 {
                     case 53:
                         WriteToConsoleLog("Error: Couldn't reach the server. The server may be down.");
+                        break;
+                    case 4060:
+                        WriteToConsoleLog("Error: Couldn't find the specified database.");
+                        break;
+                    case 18456:
+                        WriteToConsoleLog("Error: Login failed for specified user.");
                         break;
                     default:
                         WriteToConsoleLog("Error: Couldn't connect to the server.");
