@@ -26,11 +26,24 @@ namespace TBD
         const string DEFAULT_SERVERDATABASE = "TBD";
         const string DEFAULT_SERVERUSER     = "sa";
         const string DEFAULT_SERVERPASSWORD = "systemadmin";
+        const string DEFAULT_TABLENAME      = "Table_Main";
+        const string DEFAULT_LOGTABLENAME   = "Table_Log";
+        const string DEFAULT_ISOLATIONLEVEL = "READ UNCOMMITTED";
 
         SqlConnection sqlConnection;
 
-        DataSet dataSet;
+        DataSet dataSetMain, dataSetLog;
 
+        int refreshTimer = 1000;
+
+        string isolationLevel {
+            get {
+                return Application.Current.Properties["IsolationLevel"] as string;
+            }
+            set {
+                Application.Current.Properties["IsolationLevel"] = (value as string).ToUpper();
+            }
+        }
 
         public MainWindow()
         {
@@ -55,6 +68,7 @@ namespace TBD
             Application.Current.Properties["ServerDatabase"] = DEFAULT_SERVERDATABASE;
             Application.Current.Properties["ServerUser"]     = DEFAULT_SERVERUSER;
             Application.Current.Properties["ServerPassword"] = DEFAULT_SERVERPASSWORD;
+            Application.Current.Properties["IsolationLevel"] = DEFAULT_ISOLATIONLEVEL;
         }
 
         async private void ConnectToDatabase()
@@ -106,22 +120,64 @@ namespace TBD
 
         }
 
-        private void FetchMainTable()
+        private void CallBackgroundTask()
+        {
+            new Task(() => FetchDataTables()).Start();
+        }
+
+        private void FetchDataTables()
         {
             while (true)
             {
                 if (sqlConnection != null && sqlConnection.State == ConnectionState.Open)
                 {
-                    string query = "SELECT * FROM Table_test";
+                    // Main Table
+                    string query = "SELECT * FROM " + DEFAULT_TABLENAME;
                     SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-                    dataSet = new DataSet();
-                    sqlDataAdapter.Fill(dataSet);
-                    this.Dispatcher.Invoke(() => DataGridMain.ItemsSource = dataSet.Tables[0].DefaultView);       
+                    dataSetMain = new DataSet();
+
+                    try
+                    {
+                        sqlDataAdapter.Fill(dataSetMain);
+                    }
+                    catch (Exception e)
+                    {
+                        sqlConnection.Close();
+                        this.Dispatcher.Invoke(() => {
+                            WriteToConsoleLog("Error: Main table does not exist. Connection closed.");
+                            ItemStatus_Click(null, null);
+                            EllipseStatus.Fill = new SolidColorBrush(Colors.Red);
+                            });
+                        continue;
+                    }
+
+                    this.Dispatcher.Invoke(() => DataGridMain.ItemsSource = dataSetMain.Tables[0].DefaultView);
+
+                    // Log Table
+                    query = "SELECT * FROM " + DEFAULT_LOGTABLENAME;
+                    sqlCommand = new SqlCommand(query, sqlConnection);
+                    sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+                    dataSetLog = new DataSet();
+
+                    try
+                    {
+                        sqlDataAdapter.Fill(dataSetLog);
+                    }
+                    catch (Exception e)
+                    {
+                        sqlConnection.Close();
+                        this.Dispatcher.Invoke(() => {
+                            WriteToConsoleLog("Error: Log table does not exist. Connection closed.");
+                            ItemStatus_Click(null, null);
+                            EllipseStatus.Fill = new SolidColorBrush(Colors.Red);
+                        });
+                        continue;
+                    }
+
+                    this.Dispatcher.Invoke(() => DataGridLog.ItemsSource = dataSetLog.Tables[0].DefaultView);
                 }
-
-
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(refreshTimer);
             }
         }
 
@@ -178,9 +234,25 @@ namespace TBD
             }
         }
 
-        private async void CallBackgroundTask()
+        private void SliderTimer_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            new Task(() => FetchMainTable()).Start();
+            refreshTimer = Convert.ToInt16(e.NewValue);
+            if (LabelMilliseconds != null)
+                LabelMilliseconds.Content = refreshTimer.ToString() + " ms";
+        }
+
+        private void ComboBoxIsolation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string newIsolationLevel = (e.AddedItems[0] as ComboBoxItem).Content as string;
+            isolationLevel = newIsolationLevel.ToUpper();
+            Console.Out.WriteLine(isolationLevel);
+        }
+
+        private void ButtonEdit_Click(object sender, RoutedEventArgs e)
+        {
+            EditWindow editWindow = new EditWindow(sqlConnection);
+
+            editWindow.Show();
         }
     }
 }

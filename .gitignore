@@ -2,6 +2,12 @@
 TBD/bin/
 
 TBD/obj/
+<<<<<<< HEAD
 .vs/TBD/v15/sqlite3/storage.ide
 .vs/TBD/v15/sqlite3/storage.ide
 *.ide
+=======
+
+.vs/
+>>>>>>> UI
+.vs/TBD/v15/.suo
