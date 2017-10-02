@@ -5,11 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TBD"
         mc:Ignorable="d"
-        Title="Tecnologias de Bases de Dados" Height="444" Width="560.753">
+        Title="Tecnologias de Bases de Dados" Height="444" Width="533.898">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="420*"/>
-            <ColumnDefinition Width="95*"/>
+            <ColumnDefinition Width="515*"/>
             <ColumnDefinition Width="11*"/>
         </Grid.ColumnDefinitions>
         <Menu HorizontalAlignment="Left" Width="517" Height="23" VerticalAlignment="Top" Grid.ColumnSpan="3">
@@ -32,8 +31,17 @@
         <Label Content="Refresh Timer:" HorizontalAlignment="Left" Margin="368,159,0,0" VerticalAlignment="Top" Width="84" Grid.ColumnSpan="2"/>
         <Ellipse x:Name="EllipseStatus" Fill="Orange" HorizontalAlignment="Left" Height="11" Margin="373,36,0,0" Stroke="Black" VerticalAlignment="Top" Width="11" 
                  RenderTransformOrigin="1.26,1.224" />
-        <Button x:Name="ButtonSettings" Content="Connection Settings" HorizontalAlignment="Left" Margin="389,32,0,0" VerticalAlignment="Top" Width="118" Click="ButtonSettings_Click" Grid.ColumnSpan="2"/>
-        <Button x:Name="ButtonEdit" Content="Add/Edit Record" HorizontalAlignment="Left" Margin="389,256,0,0" VerticalAlignment="Top" Width="103" Click="ButtonEdit_Click" Grid.ColumnSpan="2"/>
-        <Label x:Name="LabelMilliseconds" Content="1000 ms" HorizontalAlignment="Left" Margin="31.694,159,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <Button x:Name="ButtonSettings" Content="Connection Settings" HorizontalAlignment="Left" Margin="389,32,0,0" VerticalAlignment="Top" Width="118" Click="ButtonSettings_Click"/>
+        <Button x:Name="ButtonEdit" Content="Add/Edit Record" HorizontalAlignment="Left" Margin="389,256,0,0" VerticalAlignment="Top" Width="103" Click="ButtonEdit_Click"/>
+        <Label x:Name="LabelMilliseconds" Content="1000 ms" HorizontalAlignment="Left" Margin="452,159,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
+
+        Title="Tecnologias de Bases de Dados" Height="444" Width="533.898">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="515*"/>
+            <ColumnDefinition Width="11*"/>
+        <Button x:Name="ButtonSettings" Content="Connection Settings" HorizontalAlignment="Left" Margin="389,32,0,0" VerticalAlignment="Top" Width="118" Click="ButtonSettings_Click"/>
+        <Button x:Name="ButtonEdit" Content="Add/Edit Record" HorizontalAlignment="Left" Margin="389,256,0,0" VerticalAlignment="Top" Width="103" Click="ButtonEdit_Click"/>
+        <Label x:Name="LabelMilliseconds" Content="1000 ms" HorizontalAlignment="Left" Margin="452,159,0,0" VerticalAlignment="Top"/>

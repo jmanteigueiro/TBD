@@ -31,7 +31,7 @@ namespace TBD
 
         SqlConnection sqlConnection;
 
-        DataSet dataSet;
+        DataSet dataSetMain, dataSetLog;
 
         int refreshTimer = 1000;
 
@@ -111,21 +111,60 @@ namespace TBD
 
         private void CallBackgroundTask()
         {
-            new Task(() => FetchMainTable()).Start();
+            new Task(() => FetchDataTables()).Start();
         }
 
-        private void FetchMainTable()
+        private void FetchDataTables()
         {
             while (true)
             {
                 if (sqlConnection != null && sqlConnection.State == ConnectionState.Open)
                 {
+                    // Main Table
                     string query = "SELECT * FROM " + DEFAULT_TABLENAME;
                     SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-                    dataSet = new DataSet();
-                    sqlDataAdapter.Fill(dataSet);
-                    this.Dispatcher.Invoke(() => DataGridMain.ItemsSource = dataSet.Tables[0].DefaultView);       
+                    dataSetMain = new DataSet();
+
+                    try
+                    {
+                        sqlDataAdapter.Fill(dataSetMain);
+                    }
+                    catch (Exception e)
+                    {
+                        sqlConnection.Close();
+                        this.Dispatcher.Invoke(() => {
+                            WriteToConsoleLog("Error: Main table does not exist. Connection closed.");
+                            ItemStatus_Click(null, null);
+                            EllipseStatus.Fill = new SolidColorBrush(Colors.Red);
+                            });
+                        continue;
+                    }
+
+                    this.Dispatcher.Invoke(() => DataGridMain.ItemsSource = dataSetMain.Tables[0].DefaultView);
+
+                    // Log Table
+                    query = "SELECT * FROM " + DEFAULT_LOGTABLENAME;
+                    sqlCommand = new SqlCommand(query, sqlConnection);
+                    sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+                    dataSetLog = new DataSet();
+
+                    try
+                    {
+                        sqlDataAdapter.Fill(dataSetLog);
+                    }
+                    catch (Exception e)
+                    {
+                        sqlConnection.Close();
+                        this.Dispatcher.Invoke(() => {
+                            WriteToConsoleLog("Error: Log table does not exist. Connection closed.");
+                            ItemStatus_Click(null, null);
+                            EllipseStatus.Fill = new SolidColorBrush(Colors.Red);
+                        });
+                        continue;
+                    }
+
+                    this.Dispatcher.Invoke(() => DataGridLog.ItemsSource = dataSetLog.Tables[0].DefaultView);
                 }
                 System.Threading.Thread.Sleep(refreshTimer);
             }
