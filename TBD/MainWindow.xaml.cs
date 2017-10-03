@@ -35,6 +35,7 @@ namespace TBD
         DataSet dataSetMain, dataSetLog;
 
         int refreshTimer = 1000;
+        bool useRefreshTimer = false;
 
         string isolationLevel {
             get {
@@ -129,6 +130,9 @@ namespace TBD
         {
             while (true)
             {
+                if (!useRefreshTimer)
+                    continue;
+
                 if (sqlConnection != null && sqlConnection.State == ConnectionState.Open)
                 {
                     // Main Table
@@ -248,8 +252,40 @@ namespace TBD
             Console.Out.WriteLine(isolationLevel);
         }
 
-        private void ButtonEdit_Click(object sender, RoutedEventArgs e)
+        private void CheckBoxTimer_Checked(object sender, RoutedEventArgs e)
         {
+            useRefreshTimer = !useRefreshTimer;
+        }
+
+        private void MenuItemRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            if (sqlConnection.State == ConnectionState.Closed || sqlConnection.State == ConnectionState.Broken)
+                return;
+
+            if (DataGridMain.IsVisible) {
+                string query = "SELECT * FROM " + DEFAULT_TABLENAME;
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+                dataSetMain = new DataSet();
+                sqlDataAdapter.Fill(dataSetMain);
+                DataGridMain.ItemsSource = dataSetMain.Tables[0].DefaultView;
+            }
+            else if (DataGridLog.IsVisible)
+            {
+                string query = "SELECT * FROM " + DEFAULT_LOGTABLENAME;
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+                dataSetLog = new DataSet();
+                sqlDataAdapter.Fill(dataSetLog);
+                DataGridLog.ItemsSource = dataSetLog.Tables[0].DefaultView;
+            }
+        }
+
+        private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (sqlConnection.State == ConnectionState.Closed || sqlConnection.State == ConnectionState.Broken)
+                return;
+
             EditWindow editWindow = new EditWindow(sqlConnection);
 
             editWindow.Show();

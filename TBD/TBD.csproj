@@ -115,5 +115,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon-randomize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon-add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon-refresh.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
