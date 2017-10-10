@@ -8,9 +8,6 @@ namespace TBD
     /// </summary>
     public partial class EditWindow : Window
     {
-        const string DEFAULT_TABLENAME      = "Table_Main";
-        const string DEFAULT_LOGTABLENAME   = "Table_Log";
-        
         SqlConnection sqlConnection;
 
         public EditWindow()
@@ -33,7 +30,7 @@ namespace TBD
         {
             string isolationLevel = Application.Current.Properties["IsolationLevel"] as string;
 
-            string query = "INSERT INTO " + DEFAULT_TABLENAME + " (id, name) VALUES ('" + TextBoxId.Text + "', '" + TextBoxName.Text + "')";
+            string query = "INSERT INTO " + Config.DEFAULT_TABLENAME + " (id, name) VALUES ('" + TextBoxId.Text + "', '" + TextBoxName.Text + "')";
 
             string transaction = QueryMethods.CreateTransaction(isolationLevel, query);
 

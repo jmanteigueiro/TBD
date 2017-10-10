@@ -18,7 +18,7 @@
             <MenuItem x:Name="ItemAbout" Header="About" Click="ItemAbout_Click"></MenuItem>
         </Menu>
         <Menu HorizontalAlignment="Left" Width="542" Height="30" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,23,0,0">
-            <MenuItem x:Name="MenuItemEdit" Margin="8,0,0,0" Width="31" Height="30" Click="MenuItemEdit_Click">
+            <MenuItem x:Name="MenuItemEdit" Margin="8,0,0,0" Width="31" Height="30">
                 <MenuItem.Icon>
                     <Image Source="/icon-add.png"/>
                 </MenuItem.Icon>
@@ -52,6 +52,5 @@
         <Button x:Name="ButtonSettings" Content="Connection Settings" HorizontalAlignment="Left" Margin="394,65,0,0" VerticalAlignment="Top" Width="118" Click="ButtonSettings_Click"/>
         <Label x:Name="LabelMilliseconds" Content="1000 ms" HorizontalAlignment="Left" Margin="473,185,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.14,0.75"/>
         <CheckBox x:Name="CheckBoxTimer" Content="Refresh Timer:" HorizontalAlignment="Left" Margin="378,192,0,0" VerticalAlignment="Top" Checked="CheckBoxTimer_Checked"/>
-        <Button Content="Refresh Table" Margin="394,264,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="118" RenderTransformOrigin="0.277,0.55"/>
     </Grid>
 </Window>

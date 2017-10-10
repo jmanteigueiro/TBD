@@ -22,14 +22,6 @@ namespace TBD
     /// </summary>
     public partial class MainWindow : Window
     {
-        const string DEFAULT_SERVERNAME     = "localhost";
-        const string DEFAULT_SERVERDATABASE = "TBD";
-        const string DEFAULT_SERVERUSER     = "sa";
-        const string DEFAULT_SERVERPASSWORD = "systemadmin";
-        const string DEFAULT_TABLENAME      = "Table_Main";
-        const string DEFAULT_LOGTABLENAME   = "Table_Log";
-        const string DEFAULT_ISOLATIONLEVEL = "READ UNCOMMITTED";
-
         SqlConnection sqlConnection;
 
         DataSet dataSetMain, dataSetLog;
@@ -60,16 +52,15 @@ namespace TBD
             ConnectToDatabase();
 
             CallBackgroundTask();
-
         }
 
         private void InitializeProperties()
         {
-            Application.Current.Properties["ServerName"]     = DEFAULT_SERVERNAME;
-            Application.Current.Properties["ServerDatabase"] = DEFAULT_SERVERDATABASE;
-            Application.Current.Properties["ServerUser"]     = DEFAULT_SERVERUSER;
-            Application.Current.Properties["ServerPassword"] = DEFAULT_SERVERPASSWORD;
-            Application.Current.Properties["IsolationLevel"] = DEFAULT_ISOLATIONLEVEL;
+            Application.Current.Properties["ServerName"]     = Config.DEFAULT_SERVERNAME;
+            Application.Current.Properties["ServerDatabase"] = Config.DEFAULT_SERVERDATABASE;
+            Application.Current.Properties["ServerUser"]     = Config.DEFAULT_SERVERUSER;
+            Application.Current.Properties["ServerPassword"] = Config.DEFAULT_SERVERPASSWORD;
+            Application.Current.Properties["IsolationLevel"] = Config.DEFAULT_ISOLATIONLEVEL;
         }
 
         async private void ConnectToDatabase()
@@ -136,7 +127,7 @@ namespace TBD
                 if (sqlConnection != null && sqlConnection.State == ConnectionState.Open)
                 {
                     // Main Table
-                    string query = "SELECT * FROM " + DEFAULT_TABLENAME;
+                    string query = "SELECT * FROM " + Config.DEFAULT_TABLENAME;
                     SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
                     dataSetMain = new DataSet();
@@ -159,7 +150,7 @@ namespace TBD
                     this.Dispatcher.Invoke(() => DataGridMain.ItemsSource = dataSetMain.Tables[0].DefaultView);
 
                     // Log Table
-                    query = "SELECT * FROM " + DEFAULT_LOGTABLENAME;
+                    query = "SELECT * FROM " + Config.DEFAULT_LOGTABLENAME;
                     sqlCommand = new SqlCommand(query, sqlConnection);
                     sqlDataAdapter = new SqlDataAdapter(sqlCommand);
                     dataSetLog = new DataSet();
@@ -235,6 +226,8 @@ namespace TBD
             if (settingsWindow.isToConnect)
             {
                 ConnectToDatabase();
+
+                MenuItemRefresh_Click(null, null);
             }
         }
 
@@ -259,11 +252,16 @@ namespace TBD
 
         private void MenuItemRefresh_Click(object sender, RoutedEventArgs e)
         {
+            while (sqlConnection.State == ConnectionState.Connecting)
+            {
+                // Do nothing until it connects
+            }
+
             if (sqlConnection.State == ConnectionState.Closed || sqlConnection.State == ConnectionState.Broken)
                 return;
 
             if (DataGridMain.IsVisible) {
-                string query = "SELECT * FROM " + DEFAULT_TABLENAME;
+                string query = "SELECT * FROM " + Config.DEFAULT_TABLENAME;
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                 SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
                 dataSetMain = new DataSet();
@@ -272,7 +270,7 @@ namespace TBD
             }
             else if (DataGridLog.IsVisible)
             {
-                string query = "SELECT * FROM " + DEFAULT_LOGTABLENAME;
+                string query = "SELECT * FROM " + Config.DEFAULT_LOGTABLENAME;
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                 SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
                 dataSetLog = new DataSet();
