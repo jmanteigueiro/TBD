@@ -18,12 +18,12 @@
             <MenuItem x:Name="ItemAbout" Header="About" Click="ItemAbout_Click"></MenuItem>
         </Menu>
         <Menu HorizontalAlignment="Left" Width="542" Height="30" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,23,0,0">
-            <MenuItem x:Name="MenuItemEdit" Margin="8,0,0,0" Width="31" Height="30">
+            <MenuItem x:Name="MenuItemEdit" Margin="8,0,0,0" Width="31" Height="30" Click="MenuItemEdit_Click">
                 <MenuItem.Icon>
                     <Image Source="/icon-add.png"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuItemRandom" Margin="8,0,0,0" Width="31" Height="30">
+            <MenuItem x:Name="MenuItemRandom" Margin="8,0,0,0" Width="31" Height="30" Click="MenuItemRandom_Click">
                 <MenuItem.Icon>
                     <Image Source="/icon-randomize.png"/>
                 </MenuItem.Icon>

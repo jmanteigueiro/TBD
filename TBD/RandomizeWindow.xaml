@@ -1,0 +1,16 @@
+﻿<Window x:Class="TBD.RandomizeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TBD"
+        mc:Ignorable="d"
+        Title="Random Actions" Height="175.205" Width="228.688">
+    <Grid>
+        <Label Content="# of actions:" HorizontalAlignment="Left" Margin="32,29,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxNumber" Text="50" HorizontalAlignment="Left" Height="23" Margin="112,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="46"/>
+        <Button x:Name="ButtonRandomize" Content="Randomize" HorizontalAlignment="Left" Margin="23,94,0,0" VerticalAlignment="Top" Width="72" Click="ButtonRandomize_Click"/>
+        <Button x:Name="ButtonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="119,94,0,0" VerticalAlignment="Top" Width="72" Click="ButtonCancel_Click"/>
+
+    </Grid>
+</Window>

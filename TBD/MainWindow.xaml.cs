@@ -279,14 +279,75 @@ namespace TBD
             }
         }
 
+        private void MenuItemRandom_Click(object sender, RoutedEventArgs e)
+        {
+            RandomizeWindow randomizeWindow = new RandomizeWindow();
+
+            randomizeWindow.ShowDialog();
+
+            var numberOfActions = randomizeWindow.numberOfActions;
+
+            if (numberOfActions > 0)
+                RandomizeActions(numberOfActions);
+
+        }
+
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {
-            if (sqlConnection.State == ConnectionState.Closed || sqlConnection.State == ConnectionState.Broken)
+            if (sqlConnection.State == ConnectionState.Closed || sqlConnection.State == ConnectionState.Broken || sqlConnection.State == ConnectionState.Connecting)
                 return;
 
             EditWindow editWindow = new EditWindow(sqlConnection);
 
             editWindow.Show();
         }
+
+        private void RandomizeActions(int numberOfActions)
+        {
+            for (int i = 0; i < numberOfActions; numberOfActions++)
+            {
+                // DO RANDOM TRANSACTIONS
+                int latestID = GetLatestIDFromMainTable();
+                Console.WriteLine(latestID);
+            }
+        }
+
+        #region Select Methods
+
+        private DataSet SelectFromMainTable()
+        {
+            DataSet dataSet;
+            string query = "SELECT * FROM " + Config.DEFAULT_TABLENAME;
+            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+            dataSet = new DataSet();
+            sqlDataAdapter.Fill(dataSet);
+            return dataSet;
+        }
+
+        private DataSet SelectFromLogTable()
+        {
+            DataSet dataSet;
+            string query = "SELECT * FROM " + Config.DEFAULT_LOGTABLENAME;
+            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+            dataSet = new DataSet();
+            sqlDataAdapter.Fill(dataSet);
+            return dataSet;
+        }
+
+        private int GetLatestIDFromMainTable()
+        {
+            DataSet dataSet;
+            string query = "SELECT TOP 1 * FROM " + Config.DEFAULT_TABLENAME + " ORDER BY FacturaID DESC";
+            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+            dataSet = new DataSet();
+            sqlDataAdapter.Fill(dataSet);
+            int id = Convert.ToInt32(dataSet.Tables[0].Rows[0]["FacturaID"]);
+            return id;
+        }
+
+        #endregion
     }
 }
