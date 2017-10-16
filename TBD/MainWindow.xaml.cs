@@ -295,13 +295,72 @@ namespace TBD
             editWindow.Show();
         }
 
+        private double randNum(double max, double min)
+        {
+            Random randomVal = new Random();
+            return (min + (max - min) * randomVal.NextDouble());
+        }
+
         private void RandomizeActions(int numberOfActions)
         {
             for (int i = 0; i < numberOfActions; numberOfActions++)
             {
                 // DO RANDOM TRANSACTIONS
+
+                Random randomVal = new Random();
                 int latestID = GetLatestIDFromMainTable();
                 //Console.WriteLine(latestID);
+
+                double op = randomVal.NextDouble();
+                if (op < (1 / 3))
+                {
+                    //Delete
+
+                    /*
+                     * Vai buscar os ids à BD;
+                     * Seleciona um aleatoriamente;
+                     * Delete;
+                     */
+
+                    int idToDelete = (int)Math.Round(randNum(latestID, 1));
+                    Factura fact = GetFacturaByID(idToDelete);
+
+                    QueryMethods.GenerateDeleteTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID.ToString(), fact.ClienteID.ToString(), fact.Nome, fact.Morada, sqlConnection.ClientConnectionId.ToString(), sqlConnection.WorkstationId, "TERMINAL_NAME");
+                }
+                else if (op > (2 / 3))
+                {
+                    //Update
+
+                    /*
+                     * Vai buscar os ids à BD;
+                     * Seleciona um aleatoriamente;
+                     * Update o nome, com um do dicionário;
+                     */
+
+                    int idToUpdate = (int)Math.Round(randNum(latestID, 1));
+                    Factura fact = GetFacturaByID(idToUpdate);
+
+                    //Weird stuff, porque precisa de um factura id ? é suposto editar o registo, factura id deve manter-se. IMO cliente id tambem
+                    QueryMethods.GenerateUpdateTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID.ToString(), fact.ClienteID.ToString(), "NOME DICIONARIO", "MORADA DICIONARIO", fact.FacturaID.ToString(), fact.ClienteID.ToString(), fact.Nome, fact.Morada, sqlConnection.ClientConnectionId.ToString(), sqlConnection.WorkstationId, "TERMINAL_NAME");
+                }
+                else
+                {
+                    //Insert
+
+                    /*
+                     * Vai buscar ao dicionário e insere;
+                     */
+
+                    int idToInsert = latestID + 1;
+                    Factura fact = new Factura();
+                    fact.ClienteID = 0; //mudar
+                    fact.FacturaID = idToInsert;
+                    fact.Morada = "MORADA DICIONARIO";
+                    fact.Nome = "NOME DICIONARIO";
+
+                    QueryMethods.GenerateInsertTransaction(); //copypasta, não há old.
+
+                }
             }
         }
 
