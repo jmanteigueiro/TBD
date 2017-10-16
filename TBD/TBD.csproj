@@ -58,6 +58,7 @@
     <Compile Include="EditWindow.xaml.cs">
       <DependentUpon>EditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Factura.cs" />
     <Compile Include="QueryMethods.cs" />
     <Compile Include="RandomizeWindow.xaml.cs">
       <DependentUpon>RandomizeWindow.xaml</DependentUpon>

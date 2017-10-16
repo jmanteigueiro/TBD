@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TBD.Entities;
 
 namespace TBD
 {
@@ -261,20 +262,12 @@ namespace TBD
                 return;
 
             if (DataGridMain.IsVisible) {
-                string query = "SELECT * FROM " + Config.DEFAULT_TABLENAME;
-                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
-                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-                dataSetMain = new DataSet();
-                sqlDataAdapter.Fill(dataSetMain);
+                dataSetMain = SelectFromMainTable();
                 DataGridMain.ItemsSource = dataSetMain.Tables[0].DefaultView;
             }
             else if (DataGridLog.IsVisible)
             {
-                string query = "SELECT * FROM " + Config.DEFAULT_LOGTABLENAME;
-                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
-                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-                dataSetLog = new DataSet();
-                sqlDataAdapter.Fill(dataSetLog);
+                dataSetLog = SelectFromLogTable();
                 DataGridLog.ItemsSource = dataSetLog.Tables[0].DefaultView;
             }
         }
@@ -308,7 +301,7 @@ namespace TBD
             {
                 // DO RANDOM TRANSACTIONS
                 int latestID = GetLatestIDFromMainTable();
-                Console.WriteLine(latestID);
+                //Console.WriteLine(latestID);
             }
         }
 
@@ -346,6 +339,24 @@ namespace TBD
             sqlDataAdapter.Fill(dataSet);
             int id = Convert.ToInt32(dataSet.Tables[0].Rows[0]["FacturaID"]);
             return id;
+        }
+
+        private Factura GetFacturaByID(int facturaID)
+        {
+            DataSet dataSet;
+            string query = "SELECT * FROM " + Config.DEFAULT_LOGTABLENAME + "WHERE FacturaID = " + facturaID;
+            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+            dataSet = new DataSet();
+            sqlDataAdapter.Fill(dataSet);
+
+            Factura factura = new Factura();
+            factura.FacturaID = Convert.ToInt32(dataSet.Tables[0].Rows[0]["FacturaID"]);
+            factura.ClienteID = Convert.ToInt32(dataSet.Tables[0].Rows[0]["ClienteID"]);
+            factura.Nome = (dataSet.Tables[0].Rows[0]["Nome"]).ToString();
+            factura.Morada = (dataSet.Tables[0].Rows[0]["Morada"]).ToString();
+
+            return factura;
         }
 
         #endregion
