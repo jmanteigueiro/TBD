@@ -30,13 +30,15 @@ namespace TBD
         {
             string isolationLevel = Application.Current.Properties["IsolationLevel"] as string;
 
-            string query = "INSERT INTO " + Config.DEFAULT_TABLENAME + " (id, name) VALUES ('" + TextBoxId.Text + "', '" + TextBoxName.Text + "')";
+            // TODO
 
-            string transaction = QueryMethods.CreateTransaction(isolationLevel, query);
+            //string query = "INSERT INTO " + Config.DEFAULT_TABLENAME + " (id, name) VALUES ('" + TextBoxId.Text + "', '" + TextBoxName.Text + "')";
 
-            SqlCommand sqlCommand = new SqlCommand(transaction, sqlConnection);
+            //string transaction = QueryMethods.CreateTransaction(isolationLevel, query);
 
-            sqlCommand.ExecuteNonQuery();
+            //SqlCommand sqlCommand = new SqlCommand(transaction, sqlConnection);
+
+            //sqlCommand.ExecuteNonQuery();
 
             this.Close();
         }
