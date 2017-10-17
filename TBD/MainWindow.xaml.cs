@@ -303,16 +303,14 @@ namespace TBD
 
         private void RandomizeActions(int numberOfActions)
         {
-            for (int i = 0; i < numberOfActions; numberOfActions++)
+            for (int i = 0; i < numberOfActions; i++)
             {
                 // DO RANDOM TRANSACTIONS
-
-                Random randomVal = new Random();
                 int latestID = GetLatestIDFromMainTable();
                 //Console.WriteLine(latestID);
 
-                double op = randomVal.NextDouble();
-                if (op < (1 / 3))
+                double op = randNum(1, 9);
+                if (op <= 3)
                 {
                     //Delete
 
@@ -321,13 +319,20 @@ namespace TBD
                      * Seleciona um aleatoriamente;
                      * Delete;
                      */
+                    try { 
+                        int idToDelete = (int)Math.Round(randNum(latestID, 1));
+                        Factura fact = GetFacturaByID(idToDelete);
 
-                    int idToDelete = (int)Math.Round(randNum(latestID, 1));
-                    Factura fact = GetFacturaByID(idToDelete);
-
-                    QueryMethods.GenerateDeleteTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID.ToString(), fact.ClienteID.ToString(), fact.Nome, fact.Morada, sqlConnection.ClientConnectionId.ToString(), sqlConnection.WorkstationId, "TERMINAL_NAME");
+                        string tran = QueryMethods.GenerateDeleteTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
+                        Console.WriteLine(tran);
+                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnection);
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                    catch(Exception e) {
+                        Console.WriteLine("Exception: " + e.Message);
+                    }
                 }
-                else if (op > (2 / 3))
+                else if (op >= 7)
                 {
                     //Update
 
@@ -337,11 +342,18 @@ namespace TBD
                      * Update o nome, com um do dicionário;
                      */
 
-                    int idToUpdate = (int)Math.Round(randNum(latestID, 1));
-                    Factura fact = GetFacturaByID(idToUpdate);
+                    try {
+                        int idToUpdate = (int)Math.Round(randNum(latestID, 1));
+                        Factura fact = GetFacturaByID(idToUpdate);
 
-                    //Weird stuff, porque precisa de um factura id ? é suposto editar o registo, factura id deve manter-se. IMO cliente id tambem
-                    QueryMethods.GenerateUpdateTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID.ToString(), fact.ClienteID.ToString(), "NOME DICIONARIO", "MORADA DICIONARIO", fact.FacturaID.ToString(), fact.ClienteID.ToString(), fact.Nome, fact.Morada, sqlConnection.ClientConnectionId.ToString(), sqlConnection.WorkstationId, "TERMINAL_NAME");
+                        string tran = QueryMethods.GenerateUpdateTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID, fact.ClienteID, "NOME DICIONARIO", "MORADA DICIONARIO", fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
+                        Console.WriteLine(tran);
+                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnection);
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine("Exception: " + e.Message);
+                    }
                 }
                 else
                 {
@@ -353,13 +365,19 @@ namespace TBD
 
                     int idToInsert = latestID + 1;
                     Factura fact = new Factura();
-                    fact.ClienteID = 0; //mudar
+                    fact.ClienteID = Convert.ToInt32(randNum(200, 1)); 
                     fact.FacturaID = idToInsert;
                     fact.Morada = "MORADA DICIONARIO";
                     fact.Nome = "NOME DICIONARIO";
 
-                    QueryMethods.GenerateInsertTransaction(); //copypasta, não há old.
-
+                    try { 
+                        string tran = QueryMethods.GenerateInsertTransaction(isolationLevel, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
+                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnection);
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine("Exception: " + e.Message);
+                    }
                 }
             }
         }
@@ -396,6 +414,8 @@ namespace TBD
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
             dataSet = new DataSet();
             sqlDataAdapter.Fill(dataSet);
+            if (dataSet.Tables[0].Rows.Count < 1)
+                return 0;
             int id = Convert.ToInt32(dataSet.Tables[0].Rows[0]["FacturaID"]);
             return id;
         }
@@ -403,7 +423,7 @@ namespace TBD
         private Factura GetFacturaByID(int facturaID)
         {
             DataSet dataSet;
-            string query = "SELECT * FROM " + Config.DEFAULT_LOGTABLENAME + "WHERE FacturaID = " + facturaID;
+            string query = "SELECT * FROM " + Config.DEFAULT_TABLENAME + " WHERE FacturaID = " + facturaID;
             SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
             dataSet = new DataSet();
