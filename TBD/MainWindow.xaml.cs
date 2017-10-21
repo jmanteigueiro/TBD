@@ -111,6 +111,14 @@ namespace TBD
             // In case of success
             EllipseStatus.Fill = new SolidColorBrush(Colors.Green);
             WriteToConsoleLog("Connected successfully to the server!");
+            if (DataGridMain.IsVisible)
+            {
+                //First fetch of data
+                dataSetMain = SelectFromMainTable();
+                DataGridMain.ItemsSource = dataSetMain.Tables[0].DefaultView;
+                dataSetLog = SelectFromLogTable();
+                DataGridLog.ItemsSource = dataSetLog.Tables[0].DefaultView;
+            }
 
         }
 
@@ -311,13 +319,15 @@ namespace TBD
                 // DO RANDOM TRANSACTIONS
                 int latestID = GetLatestIDFromMainTable();
 
-                // Buscar nomes aleatórios
-                FileStream fs = File.Open("./dics/clientes_dic.txt", FileMode.Open); // is this right?
-                //string[] cliente_nome = 
-                //string[] cliente_morada = 
+                // Random name
+                string[] names = File.ReadAllLines("../../dics/nome_dic.txt");
 
+                // Random address
+                string[] addresses = File.ReadAllLines("../../dics/morada_dic.txt");
+
+         
                 double op = randNum(1, 9);
-                if (op <= 3)
+                if (op <= 4)
                 {
                     //Delete
 
@@ -331,7 +341,6 @@ namespace TBD
                         Factura fact = GetFacturaByID(idToDelete);
 
                         string tran = QueryMethods.GenerateDeleteTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
-                        Console.WriteLine(tran);
                         SqlCommand sqlCommand = new SqlCommand(tran, sqlConnection);
                         sqlCommand.ExecuteNonQuery();
                     }
@@ -339,7 +348,7 @@ namespace TBD
                         Console.WriteLine("Exception: " + e.Message);
                     }
                 }
-                else if (op >= 7)
+                else if (op >= 7.5)
                 {
                     //Update
 
@@ -353,8 +362,13 @@ namespace TBD
                         int idToUpdate = (int)Math.Round(randNum(latestID, 1));
                         Factura fact = GetFacturaByID(idToUpdate);
 
-                        string tran = QueryMethods.GenerateUpdateTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID, fact.ClienteID, "NOME DICIONARIO", "MORADA DICIONARIO", fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
-                        Console.WriteLine(tran);
+                        //Random Client Name
+                        Random rnd = new Random();
+                        fact.Nome = names[rnd.Next(names.Length)];
+                        //Random Client Address
+                        fact.Morada = addresses[rnd.Next(addresses.Length)];
+
+                        string tran = QueryMethods.GenerateUpdateTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
                         SqlCommand sqlCommand = new SqlCommand(tran, sqlConnection);
                         sqlCommand.ExecuteNonQuery();
                     }
@@ -370,14 +384,19 @@ namespace TBD
                      * Vai buscar ao dicionário e insere;
                      */
 
-                    int idToInsert = latestID + 1;
-                    Factura fact = new Factura();
-                    fact.ClienteID = Convert.ToInt32(randNum(200, 1)); 
-                    fact.FacturaID = idToInsert;
-                    fact.Morada = "MORADA DICIONARIO";
-                    fact.Nome = "NOME DICIONARIO";
+                    try
+                    {
 
-                    try { 
+                        int idToInsert = latestID + 1;
+                        Factura fact = new Factura();
+                        fact.ClienteID = Convert.ToInt32(randNum(200, 1));
+                        fact.FacturaID = idToInsert;
+
+                        //Generate random data
+                        Random rnd = new Random();
+                        fact.Nome = names[rnd.Next(names.Length)];
+                        fact.Morada = addresses[rnd.Next(addresses.Length)];
+
                         string tran = QueryMethods.GenerateInsertTransaction(isolationLevel, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
                         SqlCommand sqlCommand = new SqlCommand(tran, sqlConnection);
                         sqlCommand.ExecuteNonQuery();
