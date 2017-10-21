@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -145,6 +146,7 @@ namespace TBD
                             ItemStatus_Click(null, null);
                             EllipseStatus.Fill = new SolidColorBrush(Colors.Red);
                             });
+                        Console.WriteLine("Exception: " + e.Message);
                         continue;
                     }
 
@@ -168,6 +170,7 @@ namespace TBD
                             ItemStatus_Click(null, null);
                             EllipseStatus.Fill = new SolidColorBrush(Colors.Red);
                         });
+                        Console.WriteLine("Exception: " + e.Message);
                         continue;
                     }
 
@@ -307,7 +310,11 @@ namespace TBD
             {
                 // DO RANDOM TRANSACTIONS
                 int latestID = GetLatestIDFromMainTable();
-                //Console.WriteLine(latestID);
+
+                // Buscar nomes aleatórios
+                FileStream fs = File.Open("./dics/clientes_dic.txt", FileMode.Open); // is this right?
+                //string[] cliente_nome = 
+                //string[] cliente_morada = 
 
                 double op = randNum(1, 9);
                 if (op <= 3)

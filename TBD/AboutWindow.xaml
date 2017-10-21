@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="Sobre nós" Height="250" Width="300" WindowStyle="ToolWindow">
     <Grid>
-        <Label Content="     Concurrência de Clientes&#xD;&#xA;Tecnologias de Bases de Dados" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top" Width="292" Height="54" HorizontalContentAlignment="Center"/>
-        <Label Content="André Monteiro - 8465&#xD;&#xA;José Monteiro -&#xD;&#xA;José Manteigueiro -&#xD;&#xA;&#xD;&#xA;Docente: Professor Doutor João Muranho" HorizontalAlignment="Left" Margin="20,74,0,0" VerticalAlignment="Top" Height="95" Width="246"/>
+        <Label Content="     Concorrência de Clientes&#xD;&#xA;Tecnologias de Bases de Dados" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top" Width="292" Height="54" HorizontalContentAlignment="Center"/>
+        <Label Content="André Monteiro - M8465&#xD;&#xA;José Manteigueiro - M8776&#xD;José Monteiro - M8781&#xD;&#xA;&#xA;&#xD;&#xA;Docente: Professor Doutor João Muranho" HorizontalAlignment="Left" Margin="20,74,0,0" VerticalAlignment="Top" Height="95" Width="246"/>
         <Button IsDefault="True" x:Name="ButtonClose" Content="Fechar" HorizontalAlignment="Left" Margin="106,174,0,0" VerticalAlignment="Top" Width="75" Click="ButtonClose_Click"/>
     </Grid>
 </Window>
