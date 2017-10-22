@@ -24,7 +24,7 @@ namespace TBD
     /// </summary>
     public partial class MainWindow : Window
     {
-        SqlConnection sqlConnection;
+        SqlConnection sqlConnection, sqlConnectionForActions;
 
         DataSet dataSetMain, dataSetLog;
 
@@ -66,16 +66,21 @@ namespace TBD
             Application.Current.Properties["IsolationLevel"] = Config.DEFAULT_ISOLATIONLEVEL;
         }
 
-        async private void ConnectToDatabase()
+        private SqlConnection CreateSqlConnection()
         {
-            EllipseStatus.Fill = new SolidColorBrush(Colors.Orange);
-
             string str = "server=" + Application.Current.Properties["ServerName"] + ";" +
                 "database=" + Application.Current.Properties["ServerDatabase"] + ";" +
                 "UID=" + Application.Current.Properties["ServerUser"] + ";" +
                 "password=" + Application.Current.Properties["ServerPassword"] + ";";
 
-            sqlConnection = new SqlConnection(str);
+            return new SqlConnection(str);
+        }
+
+        async private void ConnectToDatabase()
+        {
+            EllipseStatus.Fill = new SolidColorBrush(Colors.Orange);
+
+            sqlConnection = CreateSqlConnection();
 
             WriteToConsoleLog("Attempting to connect to server.");
 
@@ -308,6 +313,9 @@ namespace TBD
 
         private void RandomizeActions(int numberOfActions)
         {
+            sqlConnectionForActions = CreateSqlConnection();
+            sqlConnectionForActions.Open();
+
             for (int i = 0; i < numberOfActions; i++)
             {
                 // DO RANDOM TRANSACTIONS
@@ -333,10 +341,9 @@ namespace TBD
                     try {
                         int idToDelete = randomizer.Next(1, latestID);
                         Factura fact = GetFacturaByID(idToDelete);
-                        Console.WriteLine("id " + idToDelete);
 
                         string tran = QueryMethods.GenerateDeleteTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
-                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnection);
+                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
                         sqlCommand.ExecuteNonQuery();
                     }
                     catch(Exception e) {
@@ -363,7 +370,7 @@ namespace TBD
                         fact.Morada = addresses[randomizer.Next(addresses.Length)];
 
                         string tran = QueryMethods.GenerateUpdateTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
-                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnection);
+                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
                         sqlCommand.ExecuteNonQuery();
                     }
                     catch (Exception e) {
@@ -391,7 +398,7 @@ namespace TBD
                         fact.Morada = addresses[randomizer.Next(addresses.Length)];
 
                         string tran = QueryMethods.GenerateInsertTransaction(isolationLevel, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
-                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnection);
+                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
                         sqlCommand.ExecuteNonQuery();
                     }
                     catch (Exception e) {
@@ -429,7 +436,7 @@ namespace TBD
         {
             DataSet dataSet;
             string query = "SELECT TOP 1 * FROM " + Config.DEFAULT_TABLENAME + " ORDER BY FacturaID DESC";
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand(query, sqlConnectionForActions);
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
             dataSet = new DataSet();
             sqlDataAdapter.Fill(dataSet);
@@ -443,7 +450,7 @@ namespace TBD
         {
             DataSet dataSet;
             string query = "SELECT * FROM " + Config.DEFAULT_TABLENAME + " WHERE FacturaID = " + facturaID;
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand(query, sqlConnectionForActions);
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
             dataSet = new DataSet();
             sqlDataAdapter.Fill(dataSet);
