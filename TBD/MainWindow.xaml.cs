@@ -31,6 +31,7 @@ namespace TBD
         int refreshTimer = 1000;
         bool useRefreshTimer = false;
         Random randomizer = new Random();
+        int latestNumberOfActions = 0;
 
         string isolationLevel {
             get {
@@ -260,7 +261,7 @@ namespace TBD
         {
             string newIsolationLevel = (e.AddedItems[0] as ComboBoxItem).Content as string;
             isolationLevel = newIsolationLevel.ToUpper();
-            Console.Out.WriteLine(isolationLevel);
+            //Console.Out.WriteLine(isolationLevel);
         }
 
         private void CheckBoxTimer_Checked(object sender, RoutedEventArgs e)
@@ -291,14 +292,16 @@ namespace TBD
 
         private void MenuItemRandom_Click(object sender, RoutedEventArgs e)
         {
-            RandomizeWindow randomizeWindow = new RandomizeWindow();
+            RandomizeWindow randomizeWindow = new RandomizeWindow(latestNumberOfActions);
 
             randomizeWindow.ShowDialog();
 
             var numberOfActions = randomizeWindow.numberOfActions;
 
-            if (numberOfActions > 0)
+            if (numberOfActions > 0) {
+                latestNumberOfActions = numberOfActions;
                 new Task(() => RandomizeActions(numberOfActions)).Start();
+            }
         }
 
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
@@ -342,7 +345,7 @@ namespace TBD
                         int idToDelete = randomizer.Next(1, latestID);
                         Factura fact = GetFacturaByID(idToDelete);
 
-                        string tran = QueryMethods.GenerateDeleteTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
+                        string tran = QueryMethods.GenerateDeleteTransaction(isolationLevel, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
                         SqlCommand sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
                         sqlCommand.ExecuteNonQuery();
                     }
@@ -369,7 +372,7 @@ namespace TBD
                         //Random Client Address
                         fact.Morada = addresses[randomizer.Next(addresses.Length)];
 
-                        string tran = QueryMethods.GenerateUpdateTransaction(Application.Current.Properties["IsolationLevel"].ToString(), fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
+                        string tran = QueryMethods.GenerateUpdateTransaction(isolationLevel, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
                         SqlCommand sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
                         sqlCommand.ExecuteNonQuery();
                     }

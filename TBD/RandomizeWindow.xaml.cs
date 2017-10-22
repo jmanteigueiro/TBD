@@ -26,6 +26,17 @@ namespace TBD
             InitializeComponent();
         }
 
+        public RandomizeWindow(int numberOfActions)
+        {
+            InitializeComponent();
+
+            if (numberOfActions == 0) return;
+
+            this.numberOfActions = numberOfActions;
+
+            TextBoxNumber.Text = numberOfActions.ToString();
+        }
+
         private void ButtonRandomize_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TextBoxNumber.Text))
