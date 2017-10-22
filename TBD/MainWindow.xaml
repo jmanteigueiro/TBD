@@ -5,19 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TBD"
         mc:Ignorable="d"
-        Title="Tecnologias de Bases de Dados" Height="480" Width="548.565">
+        Title="Tecnologias de Bases de Dados" Height="480" Width="783.232">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="515*"/>
             <ColumnDefinition Width="11*"/>
         </Grid.ColumnDefinitions>
-        <Menu HorizontalAlignment="Left" Width="542" Height="23" VerticalAlignment="Top" Grid.ColumnSpan="2">
+        <Menu HorizontalAlignment="Left" Width="761" Height="23" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,0,-0.333,0">
             <MenuItem x:Name="ItemTable" Header="Table" Click="ItemTable_Click"></MenuItem>
             <MenuItem x:Name="ItemLog" Header="Log" Click="ItemLog_Click"></MenuItem>
             <MenuItem x:Name="ItemStatus" Header="Server Status" Click="ItemStatus_Click"></MenuItem>
             <MenuItem x:Name="ItemAbout" Header="About" Click="ItemAbout_Click"></MenuItem>
         </Menu>
-        <Menu HorizontalAlignment="Left" Width="542" Height="30" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,23,0,0">
+        <Menu HorizontalAlignment="Left" Width="761" Height="30" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,23,-0.333,0">
             <MenuItem x:Name="MenuItemEdit" Margin="8,0,0,0" Width="31" Height="30" Click="MenuItemEdit_Click">
                 <MenuItem.Icon>
                     <Image Source="/icon-add.png"/>
@@ -36,21 +36,21 @@
         </Menu>
 
 
-        <DataGrid x:Name="DataGridMain" HorizontalAlignment="Left" Height="373" Margin="10,62,0,0" VerticalAlignment="Top" Width="353" Visibility="Visible" IsReadOnly="True" />
-        <DataGrid x:Name="DataGridLog" HorizontalAlignment="Left" Height="373" Margin="10,62,0,0" VerticalAlignment="Top" Width="353" Visibility="Hidden" IsReadOnly="True" />
+        <DataGrid x:Name="DataGridMain" HorizontalAlignment="Left" Height="373" Margin="10,62,0,0" VerticalAlignment="Top" Width="581" Visibility="Visible" IsReadOnly="True" />
+        <DataGrid x:Name="DataGridLog" HorizontalAlignment="Left" Height="373" Margin="10,62,0,0" VerticalAlignment="Top" Width="581" Visibility="Hidden" IsReadOnly="True" />
         <Label x:Name="LabelConsole" Content="" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top" Height="286" Width="353" Foreground="White" Background="Black" Visibility="Hidden"/>
-        <ComboBox x:Name="ComboBoxIsolation" HorizontalAlignment="Left" Margin="378,132,0,0" VerticalAlignment="Top" Width="142" SelectedIndex="0" SelectionChanged="ComboBoxIsolation_SelectionChanged">
+        <ComboBox x:Name="ComboBoxIsolation" HorizontalAlignment="Left" Margin="601,137,0,0" VerticalAlignment="Top" Width="142" SelectedIndex="0" SelectionChanged="ComboBoxIsolation_SelectionChanged">
             <ComboBoxItem Content="Read Uncommitted"/>
             <ComboBoxItem Content="Read Committed"/>
             <ComboBoxItem Content="Repeatable Read"/>
             <ComboBoxItem Content="Serializable"/>
         </ComboBox>
-        <Label Content="Isolation Level" HorizontalAlignment="Left" Margin="373,106,0,0" VerticalAlignment="Top" Width="139"/>
-        <Slider x:Name="SliderTimer" HorizontalAlignment="Left" Margin="378,218,0,0" VerticalAlignment="Top" Width="148" ValueChanged="SliderTimer_ValueChanged" Minimum="200" Maximum="3000" Value="1000" SmallChange="50" LargeChange="100"/>
-        <Ellipse x:Name="EllipseStatus" Fill="Orange" HorizontalAlignment="Left" Height="11" Margin="378,69,0,0" Stroke="Black" VerticalAlignment="Top" Width="11" 
+        <Label Content="Isolation Level" HorizontalAlignment="Left" Margin="596,111,0,0" VerticalAlignment="Top" Width="139"/>
+        <Slider x:Name="SliderTimer" HorizontalAlignment="Left" Margin="601,223,0,0" VerticalAlignment="Top" Width="148" ValueChanged="SliderTimer_ValueChanged" Minimum="200" Maximum="3000" Value="1000" SmallChange="50" LargeChange="100" Grid.ColumnSpan="2"/>
+        <Ellipse x:Name="EllipseStatus" Fill="Orange" HorizontalAlignment="Left" Height="11" Margin="601,74,0,0" Stroke="Black" VerticalAlignment="Top" Width="11" 
                  RenderTransformOrigin="1.26,1.224" />
-        <Button x:Name="ButtonSettings" Content="Connection Settings" HorizontalAlignment="Left" Margin="394,65,0,0" VerticalAlignment="Top" Width="118" Click="ButtonSettings_Click"/>
-        <Label x:Name="LabelMilliseconds" Content="1000 ms" HorizontalAlignment="Left" Margin="473,185,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.14,0.75"/>
-        <CheckBox x:Name="CheckBoxTimer" Content="Refresh Timer:" HorizontalAlignment="Left" Margin="378,192,0,0" VerticalAlignment="Top" Checked="CheckBoxTimer_Checked"/>
+        <Button x:Name="ButtonSettings" Content="Connection Settings" HorizontalAlignment="Left" Margin="617,70,0,0" VerticalAlignment="Top" Width="118" Click="ButtonSettings_Click"/>
+        <Label x:Name="LabelMilliseconds" Content="1000 ms" HorizontalAlignment="Left" Margin="696,190,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.14,0.75" Grid.ColumnSpan="2"/>
+        <CheckBox x:Name="CheckBoxTimer" Content="Refresh Timer:" HorizontalAlignment="Left" Margin="601,197,0,0" VerticalAlignment="Top" Checked="CheckBoxTimer_Checked"/>
     </Grid>
 </Window>
