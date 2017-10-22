@@ -321,7 +321,7 @@ namespace TBD
 
          
                 int randomNumber = randomizer.Next(1, 10000);
-                if (randomNumber <= 3000)
+                if (randomNumber <= 4000)
                 {
                     //Delete
 
@@ -331,7 +331,7 @@ namespace TBD
                      * Delete;
                      */
                     try {
-                        int idToDelete = randomizer.Next(1, latestID);
+                        int idToDelete = randomizer.Next(0, latestID);
                         Factura fact = GetFacturaByID(idToDelete);
                         Console.WriteLine("id " + idToDelete);
 
