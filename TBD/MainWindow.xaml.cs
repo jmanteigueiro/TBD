@@ -261,7 +261,6 @@ namespace TBD
         {
             string newIsolationLevel = (e.AddedItems[0] as ComboBoxItem).Content as string;
             isolationLevel = newIsolationLevel.ToUpper();
-            //Console.Out.WriteLine(isolationLevel);
         }
 
         private void CheckBoxTimer_Checked(object sender, RoutedEventArgs e)
@@ -319,6 +318,11 @@ namespace TBD
             sqlConnectionForActions = CreateSqlConnection();
             sqlConnectionForActions.Open();
 
+            string iLevel = " SET TRANSACTION ISOLATION LEVEL " + isolationLevel + "; ";
+            SqlCommand sqlCommand = new SqlCommand(iLevel, sqlConnectionForActions);
+            sqlCommand.ExecuteNonQuery();
+
+
             for (int i = 0; i < numberOfActions; i++)
             {
                 // DO RANDOM TRANSACTIONS
@@ -330,9 +334,10 @@ namespace TBD
                 // Random address
                 string[] addresses = File.ReadAllLines("../../dics/morada_dic.txt");
 
-         
+                // Randomizer
                 int randomNumber = randomizer.Next(1, 10000);
-                if (randomNumber <= 3000)
+
+                if (randomNumber <= 3333)
                 {
                     //Delete
 
@@ -342,18 +347,17 @@ namespace TBD
                      * Delete;
                      */
                     try {
-                        int idToDelete = randomizer.Next(1, latestID);
-                        Factura fact = GetFacturaByID(idToDelete);
+                        int idToDelete = randomizer.Next(1, latestID+1);
 
-                        string tran = QueryMethods.GenerateDeleteTransaction(isolationLevel, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
-                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
+                        string tran = QueryMethods.GenerateDeleteTransaction(idToDelete);
+                        sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
                         sqlCommand.ExecuteNonQuery();
                     }
                     catch(Exception e) {
                         Console.WriteLine("[D] Exception: " + e.Message);
                     }
                 }
-                else if (randomNumber >= 7000)
+                else if (randomNumber > 6666)
                 {
                     //Update
 
@@ -362,21 +366,21 @@ namespace TBD
                      * Seleciona um aleatoriamente;
                      * Update o nome, com um do dicionário;
                      */
-
-                    try {
-                        int idToUpdate = randomizer.Next(1, latestID);
-                        Factura fact = GetFacturaByID(idToUpdate);
+                    try
+                    {
+                        int idToUpdate = randomizer.Next(1, latestID + 1);
 
                         //Random Client Name
-                        fact.Nome = names[randomizer.Next(names.Length)];
+                        string nome = names[randomizer.Next(names.Length)];
                         //Random Client Address
-                        fact.Morada = addresses[randomizer.Next(addresses.Length)];
+                        string morada = addresses[randomizer.Next(addresses.Length)];
 
-                        string tran = QueryMethods.GenerateUpdateTransaction(isolationLevel, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
-                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
+                        string tran = QueryMethods.GenerateUpdateTransaction(idToUpdate, randomizer.Next(1, 999), nome, morada);
+                        sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
                         sqlCommand.ExecuteNonQuery();
                     }
-                    catch (Exception e) {
+                    catch (Exception e)
+                    {
                         Console.WriteLine("[U] Exception: " + e.Message);
                     }
                 }
@@ -390,21 +394,17 @@ namespace TBD
 
                     try
                     {
+                        //Random Client Name
+                        string nome = names[randomizer.Next(names.Length)];
+                        //Random Client Address
+                        string morada = addresses[randomizer.Next(addresses.Length)];
 
-                        int idToInsert = latestID + 1;
-                        Factura fact = new Factura();
-                        fact.ClienteID = randomizer.Next(1, 999);
-                        fact.FacturaID = idToInsert;
-
-                        //Generate random data
-                        fact.Nome = names[randomizer.Next(names.Length)];
-                        fact.Morada = addresses[randomizer.Next(addresses.Length)];
-
-                        string tran = QueryMethods.GenerateInsertTransaction(isolationLevel, fact.FacturaID, fact.ClienteID, fact.Nome, fact.Morada);
-                        SqlCommand sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
+                        string tran = QueryMethods.GenerateInsertTransaction(randomizer.Next(1, 999), nome, morada);
+                        sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
                         sqlCommand.ExecuteNonQuery();
                     }
-                    catch (Exception e) {
+                    catch (Exception e)
+                    {
                         Console.WriteLine("[I] Exception: " + e.Message);
                     }
                 }
