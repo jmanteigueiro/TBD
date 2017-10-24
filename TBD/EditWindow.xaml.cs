@@ -32,13 +32,19 @@ namespace TBD
 
             // TODO
 
-            //string query = "INSERT INTO " + Config.DEFAULT_TABLENAME + " (id, name) VALUES ('" + TextBoxId.Text + "', '" + TextBoxName.Text + "')";
+            string query = "";
+            query += "IF EXISTS (select * from " + Config.DEFAULT_TABLENAME + " WHERE FacturaID = " + TextBoxFacturaID.Text + " )";
+            query += " BEGIN UPDATE " + Config.DEFAULT_TABLENAME + " SET FacturaID = " + TextBoxFacturaID.Text + ", ClienteID = " + TextBoxClienteID.Text
+                + ", Nome = '" + TextBoxNome.Text + "', Morada = '" + TextBoxMorada.Text + "' WHERE FacturaID = " + TextBoxFacturaID.Text
+                + " END";
+            query += " ELSE BEGIN";
+            query += " INSERT INTO " + Config.DEFAULT_TABLENAME + " (FacturaID, ClienteID, Nome, Morada) VALUES ('" 
+                + TextBoxFacturaID.Text + "', '" + TextBoxClienteID.Text + "', '" + TextBoxNome.Text + "', '" + TextBoxMorada.Text + "')";
+            query += " END";
 
-            //string transaction = QueryMethods.CreateTransaction(isolationLevel, query);
+            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
 
-            //SqlCommand sqlCommand = new SqlCommand(transaction, sqlConnection);
-
-            //sqlCommand.ExecuteNonQuery();
+            sqlCommand.ExecuteNonQuery();
 
             this.Close();
         }
