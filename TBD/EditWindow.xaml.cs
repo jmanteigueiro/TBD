@@ -33,6 +33,8 @@ namespace TBD
             // TODO
 
             string query = "";
+            query += "SET TRANSACTION ISOLATION LEVEL " + isolationLevel + "; ";
+            query += "BEGIN TRAN ";
             query += "IF EXISTS (select * from " + Config.DEFAULT_TABLENAME + " WHERE FacturaID = " + TextBoxFacturaID.Text + " )";
             query += " BEGIN UPDATE " + Config.DEFAULT_TABLENAME + " SET FacturaID = " + TextBoxFacturaID.Text + ", ClienteID = " + TextBoxClienteID.Text
                 + ", Nome = '" + TextBoxNome.Text + "', Morada = '" + TextBoxMorada.Text + "' WHERE FacturaID = " + TextBoxFacturaID.Text
@@ -40,7 +42,8 @@ namespace TBD
             query += " ELSE BEGIN";
             query += " INSERT INTO " + Config.DEFAULT_TABLENAME + " (FacturaID, ClienteID, Nome, Morada) VALUES ('" 
                 + TextBoxFacturaID.Text + "', '" + TextBoxClienteID.Text + "', '" + TextBoxNome.Text + "', '" + TextBoxMorada.Text + "')";
-            query += " END";
+            query += " END ";
+            query += "COMMIT ";
 
             SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
 

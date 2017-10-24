@@ -78,7 +78,7 @@ namespace TBD
             tran += "DELETE FROM " + Config.DEFAULT_TABLENAME + " ";
             tran += "WHERE " + COLUMN_FATURA + " = " + idToDelete;
 
-            tran += " COMMIT TRANSACTION; ";
+            tran += " COMMIT; ";
             tran += " SET @dateEnd = CONVERT( VARCHAR, GETDATE(), 121); ";
 
             tran += "INSERT INTO " + Config.DEFAULT_LOGTABLENAME + " ";
@@ -107,7 +107,7 @@ namespace TBD
             tran += "INSERT INTO " + Config.DEFAULT_TABLENAME + "(" + COLUMN_FATURA + ", " + COLUMN_CLIENT + ", " + COLUMN_NOME + ", " + COLUMN_MORADA + 
                 ") VALUES(@facturaID+1, '" + clienteID + "', '" + nome + "', '" + morada + "')";
 
-            tran += " COMMIT TRANSACTION; ";
+            tran += " COMMIT; ";
             tran += " SET @dateEnd = CONVERT( VARCHAR, GETDATE(), 121); ";
 
             tran += "INSERT INTO " + Config.DEFAULT_LOGTABLENAME + " ";
