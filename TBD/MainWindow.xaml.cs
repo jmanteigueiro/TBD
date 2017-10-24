@@ -344,6 +344,12 @@ namespace TBD
                 // Random address
                 string[] addresses = File.ReadAllLines("../../dics/morada_dic.txt");
 
+                // Random designations
+                string[] designations = File.ReadAllLines("../../dics/designacao_dic.txt");
+
+                // Random prices
+                string[] prices = File.ReadAllLines("../../dics/prod_preco_dic.txt");
+
                 // Randomizer
                 int randomNumber = randomizer.Next(1, 10000);
 
@@ -409,7 +415,27 @@ namespace TBD
                         //Random Client Address
                         string morada = addresses[randomizer.Next(addresses.Length)];
 
-                        string tran = QueryMethods.GenerateInsertTransaction(randomizer.Next(1, 999), nome, morada);
+
+                        //Random Produtos
+                        int qtd_prods = randomizer.Next(1, 5);
+                        string[] prods = new string[qtd_prods];
+                        string[] prods_price = new string[qtd_prods];
+                        int[] prods_qtd = new int[qtd_prods];
+                        int[] prods_id = new int[qtd_prods];
+                        for(int j=0; j<qtd_prods; j++)
+                        {
+                            int random_prod;
+                            do
+                            {
+                                random_prod = randomizer.Next(1, designations.Length);
+                            } while (prods_id.Contains(random_prod));
+                            prods[j] = designations[random_prod];
+                            prods_price[j] = prices[random_prod];
+                            prods_qtd[j] = randomizer.Next(1, 6);
+                            prods_id[j] = random_prod;
+                        }
+
+                        string tran = QueryMethods.GenerateInsertTransaction(randomizer.Next(1, 999), nome, morada, qtd_prods, prods, prods_price, prods_qtd, prods_id);
                         sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
                         sqlCommand.ExecuteNonQuery();
                     }

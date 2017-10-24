@@ -8,6 +8,13 @@ namespace TBD
         private const string COLUMN_FATURA = "FacturaID";
         private const string COLUMN_CLIENT = "ClienteID";
         private const string COLUMN_MORADA = "Morada";
+
+        private const string COLUMN_SEC_FATURAID = "FacturaID";
+        private const string COLUMN_SEC_PRODID = "ProdutoID";
+        private const string COLUMN_SEC_DESIGNACAO = "Designacao";
+        private const string COLUMN_SEC_PRECO = "Preco";
+        private const string COLUMN_SEC_QTD = "Qtd";
+
         private const string COLUMN_LOG_EVENT_TYPE = "EventType";
         private const string COLUMN_LOG_FATURA_ID_OLD = "FactId_Old";
         private const string COLUMN_LOG_CLIENT_ID_OLD = "ClientID_Old";
@@ -72,12 +79,15 @@ namespace TBD
                 ", @nome = " + COLUMN_NOME + ", @morada = " + COLUMN_MORADA + " FROM " + Config.DEFAULT_TABLENAME +
                 " WHERE " + COLUMN_FATURA + " = " + idToDelete + ";";
 
-            //tran += " DECLARE @lastFacturaID INT; ";
-            //tran += " SET @lastFacturaID = (SELECT TOP(1) FacturaID FROM Factura ORDER BY FacturaID DESC); ";
+            //delete fact linhas
             tran += " BEGIN TRANSACTION; ";
+            tran += "DELETE FROM " + Config.DEFAULT_SECONDARYTABLENAME + " ";
+            tran += "WHERE " + COLUMN_SEC_FATURAID + " = " + idToDelete;
+
+
             tran += "DELETE FROM " + Config.DEFAULT_TABLENAME + " ";
             tran += "WHERE " + COLUMN_FATURA + " = " + idToDelete;
-
+            
             tran += " COMMIT; ";
             tran += " SET @dateEnd = CONVERT( VARCHAR, GETDATE(), 121); ";
 
@@ -85,12 +95,12 @@ namespace TBD
             tran += "(" + COLUMN_LOG_EVENT_TYPE + ", " + COLUMN_LOG_FATURA_ID +
                 ", " + COLUMN_LOG_CLIENT_ID + ", " + COLUMN_LOG_NOME + ", " + COLUMN_LOG_MORADA +
                 ", " + COLUMN_LOG_START_TIME + ", " + COLUMN_LOG_END_TIME + ") ";
-            tran += "VALUES ('I', @facturaID, @clienteID, @nome, @morada, @dateBegin, @dateEnd);";
+            tran += "VALUES ('D', @facturaID, @clienteID, @nome, @morada, @dateBegin, @dateEnd);";
 
             return tran;
         }
 
-        public static string GenerateInsertTransaction(int clienteID, string nome, string morada)
+        public static string GenerateInsertTransaction(int clienteID, string nome, string morada, int qtd_prods, string[] prods, string[] prods_price, int[] prods_qtd, int[] prods_id)
         {
             string tran;
 
@@ -101,11 +111,19 @@ namespace TBD
             tran += " SELECT TOP(1) @facturaID = " + COLUMN_FATURA + " FROM " + Config.DEFAULT_TABLENAME +
                 " ORDER BY " + COLUMN_FATURA + " DESC; IF @facturaID is NULL SET @facturaID = 0;";
 
-            //tran += " DECLARE @lastFacturaID INT; ";
-            //tran += " SET @lastFacturaID = (SELECT TOP(1) FacturaID FROM Factura ORDER BY FacturaID DESC); ";
             tran += " BEGIN TRANSACTION; ";
             tran += "INSERT INTO " + Config.DEFAULT_TABLENAME + "(" + COLUMN_FATURA + ", " + COLUMN_CLIENT + ", " + COLUMN_NOME + ", " + COLUMN_MORADA + 
-                ") VALUES(@facturaID+1, '" + clienteID + "', '" + nome + "', '" + morada + "')";
+                ") VALUES(@facturaID+1, '" + clienteID + "', '" + nome + "', '" + morada + "');";
+
+
+            //Fact Linhas
+            for(int j=0; j<qtd_prods; j++)
+            {
+                tran += "INSERT INTO " + Config.DEFAULT_SECONDARYTABLENAME + "(" + COLUMN_SEC_FATURAID + ", " + COLUMN_SEC_PRODID + ", " + COLUMN_SEC_DESIGNACAO + ", " + COLUMN_SEC_PRECO + ", " + COLUMN_SEC_QTD + ") ";
+                tran += "VALUES(@facturaID+1, '" + prods_id[j] + "', '" + prods[j] + "', '" + prods_price[j] + "', '" + prods_qtd[j] + "');";
+            }
+
+
 
             tran += " COMMIT; ";
             tran += " SET @dateEnd = CONVERT( VARCHAR, GETDATE(), 121); ";
@@ -114,7 +132,7 @@ namespace TBD
             tran += "(" + COLUMN_LOG_EVENT_TYPE + ", " + COLUMN_LOG_FATURA_ID_OLD + ", " + COLUMN_LOG_CLIENT_ID_OLD +
                 ", " + COLUMN_LOG_NOME_OLD + ", " + COLUMN_LOG_MORADA_OLD +
                 ", " + COLUMN_LOG_START_TIME + ", " + COLUMN_LOG_END_TIME + ") ";
-            tran += "VALUES ('D', @facturaID+1, '"+clienteID+"', '"+nome+"', '"+morada+"', @dateBegin, @dateEnd);";
+            tran += "VALUES ('I', @facturaID+1, '"+clienteID+"', '"+nome+"', '"+morada+"', @dateBegin, @dateEnd);";
 
             return tran;
         }
