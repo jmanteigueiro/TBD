@@ -313,6 +313,13 @@ namespace TBD
             editWindow.Show();
         }
 
+        private void DataGridLog_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyType == typeof(System.DateTime))
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "dd/MM/yyyy HH:mm:ss.fff";
+
+        }
+
         private void RandomizeActions(int numberOfActions)
         {
             sqlConnectionForActions = CreateSqlConnection();
@@ -347,7 +354,7 @@ namespace TBD
                      * Delete;
                      */
                     try {
-                        int idToDelete = randomizer.Next(1, latestID+1);
+                        int idToDelete = randomizer.Next(1, latestID);
 
                         string tran = QueryMethods.GenerateDeleteTransaction(idToDelete);
                         sqlCommand = new SqlCommand(tran, sqlConnectionForActions);
@@ -368,7 +375,7 @@ namespace TBD
                      */
                     try
                     {
-                        int idToUpdate = randomizer.Next(1, latestID + 1);
+                        int idToUpdate = randomizer.Next(1, latestID);
 
                         //Random Client Name
                         string nome = names[randomizer.Next(names.Length)];

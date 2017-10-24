@@ -37,7 +37,7 @@
 
 
         <DataGrid x:Name="DataGridMain" HorizontalAlignment="Left" Height="373" Margin="10,62,0,0" VerticalAlignment="Top" Width="581" Visibility="Visible" IsReadOnly="True" />
-        <DataGrid x:Name="DataGridLog" HorizontalAlignment="Left" Height="373" Margin="10,62,0,0" VerticalAlignment="Top" Width="581" Visibility="Hidden" IsReadOnly="True" />
+        <DataGrid x:Name="DataGridLog" HorizontalAlignment="Left" Height="373" Margin="10,62,0,0" VerticalAlignment="Top" Width="581" Visibility="Hidden" IsReadOnly="True" AutoGeneratingColumn="DataGridLog_AutoGeneratingColumn"/>
         <Label x:Name="LabelConsole" Content="" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Height="373" Width="581" Foreground="White" Background="Black" Visibility="Hidden"/>
         <ComboBox x:Name="ComboBoxIsolation" HorizontalAlignment="Left" Margin="601,137,0,0" VerticalAlignment="Top" Width="142" SelectedIndex="0" SelectionChanged="ComboBoxIsolation_SelectionChanged">
             <ComboBoxItem Content="Read Uncommitted"/>

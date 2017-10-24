@@ -30,7 +30,7 @@ namespace TBD
 
             tran = " DECLARE @dateBegin DATETIME; ";
             tran += " DECLARE @dateEnd DATETIME; ";
-            tran += " SET @dateBegin = GetDate(); ";
+            tran += " SET @dateBegin = CONVERT( VARCHAR, GETDATE(), 121); ";
             tran += " DECLARE @clienteOldID INT;";
             tran += " DECLARE @nomeOld nvarchar(30);";
             tran += " DECLARE @moradaOld nvarchar(30);";
@@ -45,8 +45,8 @@ namespace TBD
                 " SET " + COLUMN_NOME + " = '" + nome + "', " + COLUMN_MORADA + " = '" + morada + "', " + COLUMN_CLIENT + " = " + cliente_id + " ";
             tran += "WHERE " + COLUMN_FATURA + " = " + idToUpdate + ";";
 
-            tran += " COMMIT TRANSACTION; ";
-            tran += " SET @dateEnd = GetDate(); ";
+            tran += " COMMIT; ";
+            tran += " SET @dateEnd = CONVERT( VARCHAR, GETDATE(), 121); ";
 
             tran += "INSERT INTO " + Config.DEFAULT_LOGTABLENAME + " ";
             tran += "(" + COLUMN_LOG_EVENT_TYPE + ", " + COLUMN_LOG_FATURA_ID +
@@ -63,7 +63,7 @@ namespace TBD
 
             tran = " DECLARE @dateBegin DATETIME; ";
             tran += " DECLARE @dateEnd DATETIME; ";
-            tran += " SET @dateBegin = GetDate(); ";
+            tran += " SET @dateBegin = CONVERT( VARCHAR, GETDATE(), 121); ";
             tran += " DECLARE @facturaID INT;";
             tran += " DECLARE @clienteID INT;";
             tran += " DECLARE @nome nvarchar(30);";
@@ -79,7 +79,7 @@ namespace TBD
             tran += "WHERE " + COLUMN_FATURA + " = " + idToDelete;
 
             tran += " COMMIT TRANSACTION; ";
-            tran += " SET @dateEnd = GetDate(); ";
+            tran += " SET @dateEnd = CONVERT( VARCHAR, GETDATE(), 121); ";
 
             tran += "INSERT INTO " + Config.DEFAULT_LOGTABLENAME + " ";
             tran += "(" + COLUMN_LOG_EVENT_TYPE + ", " + COLUMN_LOG_FATURA_ID +
@@ -96,7 +96,7 @@ namespace TBD
 
             tran = " DECLARE @dateBegin DATETIME; ";
             tran += " DECLARE @dateEnd DATETIME; ";
-            tran += " SET @dateBegin = GetDate(); ";
+            tran += " SET @dateBegin = CONVERT( VARCHAR, GETDATE(), 121); ";
             tran += " DECLARE @facturaID INT;";
             tran += " SELECT TOP(1) @facturaID = " + COLUMN_FATURA + " FROM " + Config.DEFAULT_TABLENAME +
                 " ORDER BY " + COLUMN_FATURA + " DESC; IF @facturaID is NULL SET @facturaID = 0;";
@@ -108,7 +108,7 @@ namespace TBD
                 ") VALUES(@facturaID+1, '" + clienteID + "', '" + nome + "', '" + morada + "')";
 
             tran += " COMMIT TRANSACTION; ";
-            tran += " SET @dateEnd = GetDate(); ";
+            tran += " SET @dateEnd = CONVERT( VARCHAR, GETDATE(), 121); ";
 
             tran += "INSERT INTO " + Config.DEFAULT_LOGTABLENAME + " ";
             tran += "(" + COLUMN_LOG_EVENT_TYPE + ", " + COLUMN_LOG_FATURA_ID_OLD + ", " + COLUMN_LOG_CLIENT_ID_OLD +
