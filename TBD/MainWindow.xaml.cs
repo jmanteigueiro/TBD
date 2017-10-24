@@ -139,7 +139,10 @@ namespace TBD
             while (true)
             {
                 if (!useRefreshTimer)
+                {
+                    System.Threading.Thread.Sleep(500);
                     continue;
+                }
 
                 if (sqlConnection != null && sqlConnection.State == ConnectionState.Open)
                 {
