@@ -148,6 +148,9 @@ namespace TBD
                 {
                     // Main Table
                     string query = "SELECT * FROM " + Config.DEFAULT_TABLENAME;
+                    // Query com qtdProds 
+                    // string query = "SELECT factura.FacturaID, ClienteID, Nome, Morada, SUM(FactLinha.Qtd) as QtdProdutos FROM Factura, FactLinha WHERE FactLinha.FacturaID = Factura.FacturaID GROUP BY Factura.FacturaID, Factura.ClienteID, Factura.Nome, Factura.Morada";
+
                     SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
                     dataSetMain = new DataSet();
@@ -353,7 +356,7 @@ namespace TBD
                 // Randomizer
                 int randomNumber = randomizer.Next(1, 10000);
 
-                if (randomNumber <= 3333)
+                if (randomNumber <= 3000)
                 {
                     //Delete
 
@@ -373,7 +376,7 @@ namespace TBD
                         Console.WriteLine("[D] Exception: " + e.Message);
                     }
                 }
-                else if (randomNumber > 6666)
+                else if (randomNumber > 3000 && randomNumber <= 8000)
                 {
                     //Update
 
@@ -417,7 +420,7 @@ namespace TBD
 
 
                         //Random Produtos
-                        int qtd_prods = randomizer.Next(1, 5);
+                        int qtd_prods = 2; //randomizer.Next(1, 5);
                         string[] prods = new string[qtd_prods];
                         string[] prods_price = new string[qtd_prods];
                         int[] prods_qtd = new int[qtd_prods];
@@ -453,6 +456,8 @@ namespace TBD
         {
             DataSet dataSet;
             string query = "SELECT * FROM " + Config.DEFAULT_TABLENAME;
+            // Query com qtdProds 
+            //string query = "SELECT factura.FacturaID, ClienteID, Nome, Morada, SUM(FactLinha.Qtd) as QtdProdutos FROM Factura, FactLinha WHERE FactLinha.FacturaID = Factura.FacturaID GROUP BY Factura.FacturaID, Factura.ClienteID, Factura.Nome, Factura.Morada";
             SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
             dataSet = new DataSet();

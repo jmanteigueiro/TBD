@@ -36,12 +36,13 @@ namespace TBD
             query += "SET TRANSACTION ISOLATION LEVEL " + isolationLevel + "; ";
             query += "BEGIN TRAN ";
             query += "IF EXISTS (select * from " + Config.DEFAULT_TABLENAME + " WHERE FacturaID = " + TextBoxFacturaID.Text + " )";
-            query += " BEGIN UPDATE " + Config.DEFAULT_TABLENAME + " SET FacturaID = " + TextBoxFacturaID.Text + ", ClienteID = " + TextBoxClienteID.Text
-                + ", Nome = '" + TextBoxNome.Text + "', Morada = '" + TextBoxMorada.Text + "' WHERE FacturaID = " + TextBoxFacturaID.Text
-                + " END";
+            query += " BEGIN UPDATE " + Config.DEFAULT_TABLENAME + " SET FacturaID = " + TextBoxFacturaID.Text + ", Nome = '" + TextBoxNome.Text + "' WHERE FacturaID = " + TextBoxFacturaID.Text
+                   + "; UPDATE " + Config.DEFAULT_SECONDARYTABLENAME + " SET qtd = '" + TextBoxQtd1.Text + "' WHERE FacturaID = '" + TextBoxFacturaID.Text + "' AND ProdutoID = (select TOP 1 ProdutoID from FactLinha where FacturaID = '" + TextBoxFacturaID.Text + "' order by produtoID asc);"
+                   + "; UPDATE " + Config.DEFAULT_SECONDARYTABLENAME + " SET qtd = '" + TextBoxQtd2.Text + "' WHERE FacturaID = '" + TextBoxFacturaID.Text + "' AND ProdutoID = (select TOP 1 ProdutoID from FactLinha where FacturaID = '" + TextBoxFacturaID.Text + "' order by produtoID desc);"
+                   + " END;";
             query += " ELSE BEGIN";
             query += " INSERT INTO " + Config.DEFAULT_TABLENAME + " (FacturaID, ClienteID, Nome, Morada) VALUES ('" 
-                + TextBoxFacturaID.Text + "', '" + TextBoxClienteID.Text + "', '" + TextBoxNome.Text + "', '" + TextBoxMorada.Text + "')";
+                + TextBoxFacturaID.Text + "', '0', '" + TextBoxNome.Text + "', 'Morada Indisponivel')";
             query += " END ";
             query += "COMMIT ";
 
