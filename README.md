@@ -1,8 +1,5 @@
 # TBD
-Projetos de Tecnologias de Base de Dados - MSc
+Projeto de Tecnologias de Base de Dados - MSc
 
-# Software para compilar
-Abrir ficheiro do projeto (.sln) no Visual Studio 2017 - Obtível no Microsoft Imagine (antigo Dreamspark) da UBI. 
-
-# Microsoft Imagine URL
-https://imagine.microsoft.com/en-us/catalog/webstore
+# Gestão de Transações
+Este trabalho, realizado no âmbito da unidade curricular de Tecnologias de Bases de Dados, visa obter uma maior compreensão sobre as transações e o processamento destas num sistema de gestão de bases de dados.
