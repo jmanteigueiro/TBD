@@ -140,14 +140,18 @@ namespace TBD
             {
                 if (!useRefreshTimer)
                 {
-                    System.Threading.Thread.Sleep(500);
+                    System.Threading.Thread.Sleep(200);
                     continue;
                 }
 
                 if (sqlConnection != null && sqlConnection.State == ConnectionState.Open)
                 {
-                    // Main Table
-                    string query = "SELECT * FROM " + Config.DEFAULT_TABLENAME;
+                    // Main Tabl
+                    string query = "";
+                    query += "SET TRANSACTION ISOLATION LEVEL " + isolationLevel + "; ";
+                    query += "BEGIN TRAN ";
+                    query += "SELECT * FROM " + Config.DEFAULT_TABLENAME + " ";
+                    query += "COMMIT; ";
                     // Query com qtdProds 
                     // string query = "SELECT factura.FacturaID, ClienteID, Nome, Morada, SUM(FactLinha.Qtd) as QtdProdutos FROM Factura, FactLinha WHERE FactLinha.FacturaID = Factura.FacturaID GROUP BY Factura.FacturaID, Factura.ClienteID, Factura.Nome, Factura.Morada";
 
