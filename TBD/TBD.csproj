@@ -54,10 +54,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Config.cs" />
+    <Compile Include="EditWindow.xaml.cs">
+      <DependentUpon>EditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Factura.cs" />
+    <Compile Include="QueryMethods.cs" />
+    <Compile Include="RandomizeWindow.xaml.cs">
+      <DependentUpon>RandomizeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -76,6 +89,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="RandomizeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -106,6 +123,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon-randomize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon-add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon-refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

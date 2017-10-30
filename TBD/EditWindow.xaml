@@ -1,0 +1,22 @@
+﻿<Window x:Class="TBD.EditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TBD"
+        mc:Ignorable="d"
+        Title="Add/Edit Record" Height="221.27" Width="232.92">
+    <Grid>
+        <Label Content="FacturaID:" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxFacturaID" HorizontalAlignment="Left" Height="23" Margin="77,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Nome:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxNome" HorizontalAlignment="Left" Height="23" Margin="77,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" SelectionOpacity="1"/>
+        <Label Content="Qtd Prod1:" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxQtd1" HorizontalAlignment="Left" Height="23" Margin="77,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" SelectionOpacity="1"/>
+        <Label Content="Qtd Prod2:" HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxQtd2" HorizontalAlignment="Left" Height="23" Margin="77,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" SelectionOpacity="1"/>
+        <Button IsDefault="True" x:Name="ButtonSave" Content="Save" HorizontalAlignment="Left" Margin="22,146,0,0" VerticalAlignment="Top" Width="75" IsDefault="True" Click="ButtonSave_Click"/>
+        <Button x:Name="ButtonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="122,146,0,0" VerticalAlignment="Top" Width="75" IsCancel="True" Click="ButtonCancel_Click"/>
+
+    </Grid>
+</Window>

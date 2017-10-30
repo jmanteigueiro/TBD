@@ -1,0 +1,15 @@
+Cafe
+Copo de leite
+Pastel
+Bolo
+Pao
+Sandes de fiambre
+Sandes de queijo
+Tosta
+Galao
+Descafeinado
+Agua 0.33l
+Agua 0.5l
+Agua 1.5l
+Cerveja 0.2l
+Cerveja 0.33l
